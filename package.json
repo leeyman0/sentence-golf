@@ -1,0 +1,18 @@
+{
+  "name": "sentence-golf",
+  "version": "0.0.1",
+  "description": "a library that scores sentences based on the frequency and number of words",
+  "main": "src/scorer/scorer.mjs",
+  "scripts": {
+    "test": "node --test",
+    "generate-frequency-data": "node util/analyzebnc.mjs"
+  },
+  "keywords": [
+    "frequency-analysis"
+  ],
+  "author": "Stanley C. Kemp",
+  "license": "GPL-3.0-or-later",
+  "devDependencies": {
+    "cheerio": "^1.1.2"
+  }
+}
