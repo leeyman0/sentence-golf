@@ -5,7 +5,10 @@
   "main": "src/scorer/scorer.mjs",
   "scripts": {
     "test": "node --test",
-    "generate-frequency-data": "node util/analyzebnc.mjs"
+    "generate-frequency-data": "node util/analyzebnc.mjs",
+    "pregenerate-sorted-frequency-data": "npm run generate-frequency-data",
+    "generate-sorted-frequency-data": "npm run sort-frequency-data",
+    "sort-frequency-data": "node util/sortfreqdata.mjs"
   },
   "keywords": [
     "frequency-analysis"
