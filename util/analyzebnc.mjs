@@ -2,6 +2,7 @@
 import path from "node:path";
 import fs from "node:fs/promises";
 import * as cheerio from "cheerio";
+import loadutils from "../src/common/loadutils.mjs";
 
 // This program assumes that the bnc is inflated from the zip in a parallel directory to
 // the source root directory (essentially, in ../bnctexts).
@@ -14,6 +15,7 @@ const BAREWORD_CENSUS_OUTPUT = path.join(
   LOADER_STATIC_DIR,
   "barewordcensus.csv"
 );
+const CENSUS_SUMMARY_OUTPUT = path.join(LOADER_STATIC_DIR, "censussummary.txt");
 
 // first, turn the path of the BNC directory into a list of its sub sub directories,
 fs.readdir(BNC_TEXTS_DIR, { recursive: true })
@@ -47,33 +49,72 @@ fs.readdir(BNC_TEXTS_DIR, { recursive: true })
       .then(() => [lemmaCensusData, barewordCensusData]);
   })
   .then(async ([lemmaCensusData, barewordCensusData]) => {
-    console.log(`Writing lemma data`);
+    let censusSummary = {
+      barewordCount: 0,
+      lemmaCount: 0,
+    };
+
     const creatrunc =
       fs.constants.O_CREAT | fs.constants.O_WRONLY | fs.constants.O_TRUNC;
-    let lemmaFile = await fs.open(LEMMA_CENSUS_OUTPUT, creatrunc);
-    // First, write header
-    await lemmaFile.write("lemma,\tcount\n");
-    for (const [lemma, entry] of lemmaCensusData) {
-      if (entry.count >= MIN_COUNT) {
-        let lemmaCol = (lemma + ",").padEnd(20);
-        let countCol = ("" + entry.count).padStart(10);
-        await lemmaFile.write(lemmaCol + countCol + "\r\n");
+
+    try {
+      // Write the lemma data
+      console.log(`Writing lemma data`);
+      let lemmaFile = await fs.open(LEMMA_CENSUS_OUTPUT, creatrunc);
+      // First, write header
+      await lemmaFile.write("lemma,\tcount\n");
+      for (const [lemma, entry] of lemmaCensusData) {
+        if (entry.count >= MIN_COUNT && !/\d/.test(lemma)) {
+          // keep tally of lemma
+          censusSummary.lemmaCount += entry.count;
+
+          // format the entry and send to lemma file
+          let lemmaCol = (lemma + ",").padEnd(20);
+          let countCol = ("" + entry.count).padStart(10);
+          await lemmaFile.write(lemmaCol + countCol + "\r\n");
+        }
       }
+      await lemmaFile.close();
+    } catch (error) {
+      throw new Error(
+        `Error writing bareword census to ${BAREWORD_CENSUS_OUTPUT}`,
+        { cause: error }
+      );
     }
-    await lemmaFile.close();
-    console.log(`Writing word data`);
-    let barewordFile = await fs.open(BAREWORD_CENSUS_OUTPUT, creatrunc);
-    // First, write header
-    await barewordFile.write("word,\tlemma,\tcount\n");
-    for (const [word, entry] of barewordCensusData) {
-      if (entry.count >= MIN_COUNT) {
-        let wordCol = (word + ",").padEnd(20);
-        let lemmaCol = (entry.lemma + ",").padEnd(20);
-        let countCol = ("" + entry.count).padStart(10);
-        await barewordFile.write(wordCol + lemmaCol + countCol + "\r\n");
+
+    try {
+      // Write the word data
+      console.log(`Writing word data`);
+      let barewordFile = await fs.open(BAREWORD_CENSUS_OUTPUT, creatrunc);
+      await barewordFile.write("word,\tlemma,\tcount\n");
+      for (const [word, entry] of barewordCensusData) {
+        if (entry.count >= MIN_COUNT && !/\d/.test(word)) {
+          // keep tally of bareword count
+          censusSummary.barewordCount += entry.count;
+
+          // format the line
+          let wordCol = (word + ",").padEnd(20);
+          let lemmaCol = (entry.lemma + ",").padEnd(20);
+          let countCol = ("" + entry.count).padStart(10);
+          await barewordFile.write(wordCol + lemmaCol + countCol + "\r\n");
+        }
       }
+      await barewordFile.close();
+    } catch (error) {
+      throw new Error(
+        `Error writing bareword census to ${BAREWORD_CENSUS_OUTPUT}`,
+        { cause: error }
+      );
     }
-    await barewordFile.close();
+    try {
+      // Write the census summary
+      await loadutils.writeIni(CENSUS_SUMMARY_OUTPUT, censusSummary);
+    } catch (error) {
+      throw new Error(
+        `Error writing census summary to ${CENSUS_SUMMARY_OUTPUT}`,
+        { cause: error }
+      );
+    }
   })
   .catch((error) => {
     console.error(`Error reading ${BNC_TEXTS_DIR}`);

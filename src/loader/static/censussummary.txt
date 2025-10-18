@@ -1,0 +1,2 @@
+barewordCount=84136518
+lemmaCount=84165121
