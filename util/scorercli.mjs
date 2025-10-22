@@ -1,4 +1,5 @@
-import scorer from "../../src/scorer/scorer.mjs";
+/** @file a cli for the scorer */
+import scorer from "../src/scorer/scorer.mjs";
 
 import readline from "node:readline/promises";
 
