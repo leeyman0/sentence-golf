@@ -13,7 +13,7 @@
   "keywords": [
     "frequency-analysis"
   ],
-  "author": "Stanley C. Kemp",
+  "author": "SCK",
   "license": "GPL-3.0-or-later",
   "devDependencies": {
     "cheerio": "^1.1.2"
