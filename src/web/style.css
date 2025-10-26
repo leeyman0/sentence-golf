@@ -1,0 +1,89 @@
+html {
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+body {
+  margin: 0px;
+  color: white;
+  background-color: black;
+}
+
+p {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+#page-title {
+  margin: 0px;
+  padding-left: 10px;
+  padding-bottom: 10px;
+  font-family: Helvetica, Arial, sans-serif;
+  color: white;
+  font-style: italic;
+  font-weight: 900;
+  font-size: 48pt;
+  /* text-transform: full-width; */
+  text-shadow: 2px 2px 1px color-mix(in srgb, lime 83%, black 12%),
+    5px 5px 2px color-mix(in srgb, lime 75%, black 25%),
+    8px 8px 3px color-mix(in srgb, lime 63%, black 37%),
+    10px 10px 4px color-mix(in srgb, lime 50%, black 50%),
+    15px 15px 5px color-mix(in srgb, lime 25%, black 75%);
+}
+
+@property --heading-color {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: lime;
+}
+
+.body-heading {
+  font-style: italic;
+  color: color-mix(in srgb, var(--heading-color) 50%, white 50%);
+  text-shadow: 2px 2px 1px
+      color-mix(in srgb, var(--heading-color) 83%, black 12%),
+    5px 5px 2px color-mix(in srgb, var(--heading-color) 75%, black 25%),
+    8px 8px 3px color-mix(in srgb, var(--heading-color) 63%, black 37%),
+    10px 10px 4px color-mix(in srgb, var(--heading-color) 50%, black 50%),
+    15px 15px 5px color-mix(in srgb, var(--heading-color) 25%, black 75%);
+}
+
+#golf-machine {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#sentence-input {
+  width: 75%;
+  font-size: 12pt;
+  font-family: inherit;
+  background-color: inherit;
+  color: inherit;
+}
+
+.ui-button {
+  color: white;
+  background-color: black;
+  border-radius: 5px;
+}
+
+#scoring-header {
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+}
+
+#scoring-results {
+  width: 75%;
+}
+
+#score-button {
+  font-size: 24pt;
+}
+
+#hide-button {
+  font-size: 12pt;
+  margin-left: 15px;
+  align-self: center;
+  height: fit-content;
+}

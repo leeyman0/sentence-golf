@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sentence Golf</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1 id="page-title">Sentence Golf!</h1>
+    <p>
+      Sentence golf is a lot like normal golf, except the players use words
+      instead of clubs, and the holes to drive and putt are in the mind of the
+      judges.
+    </p>
+    <p>
+      I got this idea from my reoccurring fascination of code golf and applying
+      it to communication in general. A blog post is in the works for further
+      discussion.
+    </p>
+    <h2 class="body-heading">The Sport</h2>
+    <p>Play of this sport needs four things:</p>
+    <ul>
+      <li>A group of players to compete against one another</li>
+      <li>One or more impartial judges</li>
+      <li>The golf scoring program that can be found on this webpage below</li>
+      <li>
+        A set of communication goals that the players will try to fulfill in the
+        course of play and that the judges will evaluate
+      </li>
+    </ul>
+    <p>
+      First, each player on their own will try to fill all communication goals
+      within the amount of time allotted by the judges. The judges of that game
+      control what resources the players use during the game. It is recommended
+      that players have access to the golf scoring program to check their work.
+    </p>
+    <p>
+      The golf program grades each word of the text that the players use to
+      achieve their communication goals by how frequent it is within the English
+      language. The score of each word will range from 1 to 6. The more frequent
+      the word is, the less it will score. If a word is not found in the dataset
+      at all, a ten-point penalty plus a point for every letter in the word is
+      incurred. The scores of all the words are combined to get the final score
+      of the sentence or passage.
+    </p>
+    <p>
+      The judges evaluate how well each of the players did at each of the
+      communication goals, considering factors such as clarity and how well the
+      point is made. Using this evaluation and conferring amongst themselves,
+      the judges will decide on each communication goal to give the player -10,
+      0, or +100 to the players' score.
+    </p>
+    <p>
+      After the judges add up all of the points, the player with the least
+      points wins the competition.
+    </p>
+    <div id="golf-machine">
+      <textarea
+        placeholder="Type a sentence here, then press the score button to score it."
+        rows="5"
+        id="sentence-input"
+      ></textarea>
+      <br />
+      <input type="button" id="score-button" class="ui-button" value="Score" />
+      <br />
+      <div id="scoring-results">
+        <div id="scoring-header">
+          <h2 class="body-heading" id="result-header">Results</h2>
+          <input
+            type="button"
+            class="ui-button"
+            id="hide-button"
+            value="Hide"
+          />
+        </div>
+        <div id="results-info">Score: 10</div>
+      </div>
+    </div>
+    <script lang="js" type="module" src="index.mjs"></script>
+  </body>
+</html>
