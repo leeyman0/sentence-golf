@@ -1,3 +1,5 @@
+import scorer from "./build/scorer.mjs";
+
 const scoreTextArea = document.getElementById("sentence-input");
 const scoreButton = document.getElementById("score-button");
 const hideButton = document.getElementById("hide-button");
@@ -24,6 +26,8 @@ hideButton.addEventListener("click", () => {
 
 function scoreGolfText(text) {
   console.log("scoreGolfText called");
+  let score = scorer.score(text);
+  console.log("Result:", score);
 }
 
 function showResults() {

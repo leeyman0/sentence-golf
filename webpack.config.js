@@ -15,9 +15,15 @@ const path = require("path");
 module.exports = {
   entry: "./src/scorer/scorer.mjs",
   mode: "development",
+  experiments: {
+    outputModule: true,
+  },
   output: {
     path: `${__dirname}/src/web/build`,
     filename: "scorer.mjs",
+    library: {
+      type: "module",
+    },
   },
   node: {
     __dirname: "mock",
