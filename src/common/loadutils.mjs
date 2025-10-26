@@ -1,5 +1,5 @@
 /** @file this file contains several utilities for loading file data from paths */
-import fs from "node:fs/promises";
+import fs from "fs/promises";
 
 /**
  * Reads data from a csv file.

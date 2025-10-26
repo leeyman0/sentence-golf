@@ -1,2 +1,8 @@
 # NPM Junk
 node_modules/**
+
+# Where we put webpack output
+src/web/build/**
+!src/web/build/.gitkeep
+!src/web/build/static/
+!src/web/build/static/.gitkeep

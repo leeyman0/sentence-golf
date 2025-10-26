@@ -8,14 +8,20 @@
     "generate-frequency-data": "node util/analyzebnc.mjs",
     "pregenerate-sorted-frequency-data": "npm run generate-frequency-data",
     "generate-sorted-frequency-data": "npm run sort-frequency-data",
-    "sort-frequency-data": "node util/sortfreqdata.mjs"
+    "sort-frequency-data": "node util/sortfreqdata.mjs",
+    "prebuild:web": "cp -r src/loader/static/* src/web/build/static",
+    "build:web": "npx webpack"
   },
   "keywords": [
-    "frequency-analysis"
+    "frequency-analysis",
+    "computational-linguistics"
   ],
   "author": "SCK",
   "license": "GPL-3.0-or-later",
   "devDependencies": {
-    "cheerio": "^1.1.2"
+    "cheerio": "^1.1.2",
+    "node-polyfill-webpack-plugin": "^4.1.0",
+    "webpack": "^5.102.1",
+    "webpack-cli": "^6.0.1"
   }
 }

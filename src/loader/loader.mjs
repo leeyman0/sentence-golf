@@ -1,5 +1,4 @@
 /** @file loads data from static sources */
-import fs from "fs/promises";
 import path from "path";
 
 import loadutils from "../common/loadutils.mjs";
@@ -10,7 +9,9 @@ import loadutils from "../common/loadutils.mjs";
 
 /** @typedef {{ barewordCount: number, lemmaCount: number}} CensusSummary */
 
-const thisModulesDirectory = import.meta.dirname;
+const thisModulesDirectory = import.meta.dirname ?? "./build";
+
+// console.log(thisModulesDirectory);
 
 const WORD_FREQ_PATH = path.join(
   thisModulesDirectory,
