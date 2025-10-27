@@ -75,6 +75,7 @@ p {
 
 #scoring-results {
   width: 75%;
+  display: none;
 }
 
 #score-button {
@@ -86,4 +87,28 @@ p {
   margin-left: 15px;
   align-self: center;
   height: fit-content;
+}
+
+#results-details {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.word-score-shell {
+  background-color: whitesmoke;
+  border-radius: 20px;
+  padding: 10px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  color: black;
+}
+
+.word-score-window {
+  background-color: wheat;
+  color: inherit;
+  padding: 5px;
+  border-radius: 15px;
+  border: solid black 1px;
+  margin-left: 3px;
 }
