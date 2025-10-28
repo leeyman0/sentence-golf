@@ -1,6 +1,6 @@
 {
   "name": "sentence-golf",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "a library that scores sentences based on the frequency and number of words",
   "main": "src/scorer/scorer.mjs",
   "scripts": {

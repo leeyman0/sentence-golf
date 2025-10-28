@@ -7,10 +7,10 @@ For development:
 2. Run `npm install`
 
 ## Running
-There are two ways that the Sentence Golf frequency scoring algorithm can be run. 
+There are two ways that the Sentence Golf frequency scoring algorithm can be run. Or, you can go to the website to score code online: [https://patterns-symbols-semantics.neocities.org/sentence-golf/](https://patterns-symbols-semantics.neocities.org/sentence-golf/) 
 
 ### Webpack UI
-One is using the web interface. To run this, first build the source code into web format with webpack using `npm run build`. Then, use a webserver in the folder `src/web` to host a static website from which the user can score sentences.
+One is using the web interface. To run this, first build the source code into web format with webpack using `npm run build:web`. Then, use a webserver in the folder `src/web` to host a static website from which the user can score sentences.
 
 ### Node Headless
 Another way to use this code is with nodejs. No additional build steps need to be run. The node package exports using the external interface contained in `src/scorer/scorer.mjs`.
