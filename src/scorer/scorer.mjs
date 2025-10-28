@@ -7,8 +7,6 @@ const summaryData = loader.getCensusSummary();
 const wordData = loader.getWordFrequencyData();
 const lemmaData = loader.getLemmaFrequencyData();
 
-// console.log(`summaryData: ${JSON.stringify(summaryData)}`);
-
 const WORD_NOT_FOUND = -1;
 const WORD_NOT_FOUND_POINT_PENALTY = 10;
 
@@ -18,10 +16,6 @@ const WORD_LOG_ZERO =
   Math.log10(summaryData.barewordCount) - Math.log10(wordData[0][1].count);
 const LEMMA_LOG_ZERO =
   Math.log10(summaryData.lemmaCount) - Math.log10(lemmaData[0][1].count);
-
-// console.log(
-//   `WORD_LOG_ZERO: ${WORD_LOG_ZERO}, LEMMA_LOG_ZERO: ${LEMMA_LOG_ZERO}`
-// );
 
 /**
  * Find the relative frequency of the word by adding the relative lemma frequency to the
@@ -118,25 +112,39 @@ function wordize(str) {
 }
 
 /**
+ * Calculates and returns a raw score
+ * @param {string} word the word to put through the scoring function
+ * @returns {number} the raw score, or WORD_NOT_FOUND sentinel value.
+ */
+function scoreFunction(word) {
+  let relFreq = calcualateRelativeFreq(word);
+  return relFreq !== WORD_NOT_FOUND ? Math.floor(1 + relFreq) : WORD_NOT_FOUND;
+}
+
+/**
  * Scores a string containing nothing but a single word
  * @param {string} word a string shaped like a word
+ * @param {ScoringOptions} scoringOptions options object for scoring
  * @returns {number} the total score of the word
  */
-function scoreWord(word) {
-  let relFreq = calcualateRelativeFreq(word);
-  if (relFreq !== WORD_NOT_FOUND) {
-    return Math.floor(1 + relFreq);
+function scoreWord(word, scoringOptions = {}) {
+  let rawScore = scoreFunction(word);
+  if (rawScore !== WORD_NOT_FOUND) {
+    return rawScore;
   } else {
-    return WORD_NOT_FOUND_POINT_PENALTY;
+    return (
+      (scoringOptions?.notFoundPenalty ?? WORD_NOT_FOUND_POINT_PENALTY) +
+      word.length
+    );
   }
 }
 
 /**
- * @typedef {{ properNouns?: string[], resultType?: "simple" | "detailed"}} ScoringOptions
+ * @typedef {{ properNouns?: string[], resultType?: "simple" | "detailed", notFoundPenalty?: number}} ScoringOptions
  */
 
 /**
- * @typedef {{ word: string, score: number, status: "FOUND" | "NOT FOUND" }} WordScore
+ * @typedef {{ word: string, score: number, status: "FOUND" | "NOT FOUND" | "UNSCORED" }} WordScore
  */
 
 /**
@@ -152,6 +160,8 @@ function scoreWord(word) {
  * "detailed", it comes with extra details
  */
 function score(str, options = {}) {
+  const wordNotFoundPenalty =
+    options?.notFoundPenalty ?? WORD_NOT_FOUND_POINT_PENALTY;
   let score = 0;
   let wordScores = [];
   let returnType = options.resultType ?? "simple";
@@ -160,19 +170,19 @@ function score(str, options = {}) {
   );
 
   let words = wordize(str);
-  // console.log("words:", words);
 
   words
     .filter((word) => !properNouns.includes(word.toUpperCase())) // filter words that match proper nouns
     .forEach((word) => {
-      let wordScore = scoreWord(word);
+      let rawScore = scoreFunction(word);
+      const wordFound = rawScore !== WORD_NOT_FOUND;
+      let wordScore = wordFound ? rawScore : wordNotFoundPenalty + word.length;
 
       if (returnType === "detailed") {
         wordScores.push({
           word,
           wordScore,
-          status:
-            wordScore === WORD_NOT_FOUND_POINT_PENALTY ? "NOT FOUND" : "FOUND",
+          status: !wordFound ? "NOT FOUND" : "FOUND",
         });
       }
       score += wordScore;

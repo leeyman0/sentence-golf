@@ -21,10 +21,21 @@ describe("scorer", () => {
 
       assert.equal(result, 6);
     });
-    it("scores words found less than 5 times in the dataset as equal to the word not found penalty", () => {
+    it("scores words found less than 5 times in the dataset as equal to the word not found penalty plus the length of the word", () => {
       let result = scorer.scoreWord("hapax");
 
-      assert.equal(result, scorer.constants.WORD_NOT_FOUND_POINT_PENALTY);
+      assert.equal(
+        result,
+        scorer.constants.WORD_NOT_FOUND_POINT_PENALTY + "hapax".length
+      );
+    });
+    describe("scoreWord options", () => {
+      it("scores words using notFoundPenalty, if available", () => {
+        let shouldntBeFound = "hapax";
+        const notFoundPenalty = 25;
+        let result = scorer.scoreWord(shouldntBeFound, { notFoundPenalty });
+        assert.equal(result, notFoundPenalty + shouldntBeFound.length);
+      });
     });
   });
   describe("score", () => {
@@ -81,6 +92,23 @@ describe("scorer", () => {
           "someday",
         ]
       );
+    });
+    describe("score options", () => {
+      it("scores words with notFoundPenalty, if available", () => {
+        let shouldntBeFound = "hapax";
+        const notFoundPenalty = 25;
+        let result = scorer.score(shouldntBeFound, { notFoundPenalty });
+        assert.equal(result, notFoundPenalty + shouldntBeFound.length);
+      });
+      it("filters out words in properNouns", () => {
+        let properNouns = ["Joey", "Marlow", "Norla"];
+
+        const expected = scorer.score("and went to see", { properNouns });
+        let result = scorer.score("Joey and Marlow went to see Norla.", {
+          properNouns,
+        });
+        assert.equal(result, expected);
+      });
     });
   });
 });
